@@ -9,7 +9,7 @@
 /* Layout: uma coluna por posto; % grande no topo, detalhe por baixo. Leitura à distância. */
 :root {
   --bg: #04080f;
-  --bg-col: rgba(0,15,40,0.2);
+  --bg-col: rgba(0,15,40,0.5);
   --line: rgba(255,255,255,0.12);
   --fg: #ffffff;
   --fg-dim: rgba(255,255,255,0.72);
@@ -68,61 +68,68 @@ main {
 }
 .col {
   container-type: inline-size;
-  display: flex; flex-direction: column;
+  display: grid; grid-template-rows: 1fr auto 1fr; grid-template-columns: minmax(0, 1fr);
   min-width: 0; min-height: 0;
   padding: clamp(12px, 2vh, 24px) clamp(14px, 6cqw, 28px);
   border-left: 1px solid var(--line);
   background: var(--bg-col);
-  gap: clamp(8px, 1.6vh, 18px);
+  gap: clamp(8px, 2.4vh, 60px);
 }
 .col:first-child { border-left: 0; }
 
-.posto-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.posto { font-family: var(--display); font-size: clamp(30px, 11cqw, 52px); letter-spacing: 3px; line-height: 1; }
+.posto-head { align-self: start; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.posto { font-family: var(--display); font-size: min(12cqw, 5.6vh); letter-spacing: 3px; line-height: 1; }
 .pill {
   font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
-  font-size: clamp(12px, 5cqw, 18px);
-  padding: 3px 10px; border: 1px solid currentColor; border-radius: 999px; white-space: nowrap;
+  font-size: min(5cqw, 2.4vh);
+  padding: .15em .6em; border: 2px solid currentColor; border-radius: 999px; white-space: nowrap;
 }
 .pill.on { color: var(--green); }
 .pill.off { color: var(--fg-faint); }
 
+/* Bloco principal (%, lote, prazo): centrado na altura da coluna */
+.focus { display: grid; gap: clamp(8px, 2.4vh, 60px); min-width: 0; }
+
+/* 1.º foco: % de realização — ocupa a largura toda da coluna */
 .pct {
-  font-family: var(--display); line-height: .82; letter-spacing: -2px;
-  font-size: min(44cqw, 26vh);
+  font-family: var(--display); line-height: .8; letter-spacing: -.01em;
+  font-size: min(58cqw, 34vh);
   font-variant-numeric: tabular-nums;
-  text-align: center;
-  padding-block: clamp(2px, 1vh, 12px);
+  text-align: center; white-space: nowrap;
+  padding-top: .04em;
+  text-shadow: 0 .03em .12em rgba(0,0,0,.55);
 }
 .pct small { font-size: .4em; letter-spacing: 0; margin-left: .04em; }
-.next-priority {
-  align-self: flex-start;
-  display: grid;
-  gap: 2px;
-  max-width: 100%;
-  padding: 4px 10px;
-  background: rgba(255,255,255,0.06);
-}
-.next-priority .k { font-size: clamp(11px, 3.8cqw, 16px); }
-.next-priority .value {
-  font-family: var(--display);
-  font-size: clamp(12px, calc(7cqw - 10px), 24px);
-  line-height: 1;
-  overflow-wrap: anywhere;
-}
-.big-bar { height: clamp(8px, 1.4vh, 14px); background: rgba(255,255,255,0.14); border-radius: 7px; overflow: hidden; }
-.big-bar > div { height: 100%; border-radius: 7px; transition: width .6s ease; }
-.priority-focus { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 5px 8px; border-block: 1px solid var(--line); padding-block: 6px; }
-.priority-focus .name { display: grid; gap: 2px; min-width: 0; }
-.priority-focus .task { font-size: clamp(15px, 4.8cqw, 22px); font-weight: 700; color: var(--fg); overflow-wrap: anywhere; }
-.priority-focus .value { font-family: var(--display); font-size: clamp(36px, 13cqw, 56px); line-height: 1; color: var(--cyan); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.priority-focus .value small { font-size: .55em; }
-.priority-focus .bar { grid-column: 1 / -1; height: 6px; background: rgba(255,255,255,0.14); border-radius: 4px; overflow: hidden; }
-.priority-focus .bar > div { height: 100%; border-radius: 4px; transition: width .6s ease; }
+.big-bar { height: min(3cqw, 1.4vh); background: rgba(0,0,0,0.4); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.22); border-radius: 999px; overflow: hidden; }
+.big-bar > div { height: 100%; border-radius: 999px; transition: width .6s ease; }
 
-.model { text-align: center; }
-.model .m { font-family: var(--display); font-size: clamp(22px, 8.4cqw, 44px); letter-spacing: 1.5px; line-height: 1.05; overflow-wrap: anywhere; }
-.model .l { font-size: clamp(16px, 5.6cqw, 28px); color: var(--fg-dim); letter-spacing: 2px; text-transform: uppercase; margin-top: 2px; }
+/* 2.º foco: nome do lote */
+.model { text-align: center; text-shadow: 0 .03em .12em rgba(0,0,0,.55); }
+.model .m { font-family: var(--display); font-size: min(16cqw, 7.4vh); letter-spacing: .02em; line-height: .95; overflow-wrap: anywhere; text-wrap: balance; }
+.model .l { font-family: var(--display); font-size: min(16cqw, 7.4vh); letter-spacing: .02em; line-height: .95; margin-top: .12em; }
+.model .l span { font-family: var(--body); font-weight: 700; font-size: .36em; letter-spacing: .18em; text-transform: uppercase; color: var(--fg-dim); vertical-align: middle; margin-right: .5em; }
+.model .l.none { color: var(--fg-faint); font-size: min(9cqw, 4vh); }
+
+/* 3.º foco: barra do prazo */
+.prazo { display: grid; gap: min(2cqw, 1vh); }
+.prazo .k { font-size: min(6.5cqw, 3vh); color: var(--fg-dim); }
+.prazo .big-bar { height: min(11cqw, 5vh); }
+
+/* Secundário: prioridades, no fundo da coluna */
+.secondary { align-self: end; display: grid; gap: min(3cqw, 1.4vh); border-top: 1px solid var(--line); padding-top: min(4cqw, 1.8vh); }
+.k { font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--fg-dim); font-size: min(4.8cqw, 2.2vh); }
+.priority-focus { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: min(4cqw, 1.8vh); }
+.pie {
+  width: min(21cqw, 9.5vh); aspect-ratio: 1; border-radius: 50%;
+  background: conic-gradient(var(--c) calc(var(--p) * 1%), rgba(0,0,0,0.45) 0);
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,0.4);
+}
+.priority-focus .name { display: grid; gap: 2px; min-width: 0; }
+.priority-focus .task { font-family: var(--display); font-size: min(12cqw, 5.4vh); line-height: 1; letter-spacing: .02em; overflow-wrap: anywhere; }
+.priority-focus .value { font-family: var(--display); font-size: min(15cqw, 6.8vh); line-height: 1; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.priority-focus .value small { font-size: .55em; }
+.next-priority { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.next-priority .value { font-family: var(--display); font-size: min(12cqw, 5.4vh); line-height: 1; letter-spacing: .02em; overflow-wrap: anywhere; text-align: right; }
 
 .zones { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(6px, 1.2vh, 14px); border-top: 1px solid var(--line); padding-top: clamp(8px, 1.6vh, 18px); }
 .zone { display: grid; grid-template-columns: 1fr auto; row-gap: 4px; align-items: baseline; }
@@ -131,9 +138,7 @@ main {
 .zone .b { grid-column: 1 / -1; height: clamp(5px, .9vh, 9px); background: rgba(255,255,255,0.12); border-radius: 5px; overflow: hidden; }
 .zone .b > div { height: 100%; border-radius: 5px; transition: width .6s ease; }
 
-.prazo { margin-top: auto; border-top: 1px solid var(--line); padding-top: clamp(8px, 1.6vh, 18px); display: grid; gap: 6px; }
 .prazo .row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
-.k { font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--fg-faint); font-size: clamp(12px, 4.6cqw, 20px); }
 .prazo .num { font-family: var(--display); font-size: clamp(30px, 11cqw, 56px); line-height: 1; font-variant-numeric: tabular-nums; }
 .prazo .num span { color: var(--fg-faint); font-size: .6em; }
 .prazo .rest { font-weight: 700; letter-spacing: 2px; text-transform: uppercase; font-size: clamp(14px, 5.4cqw, 26px); text-align: right; }
@@ -156,15 +161,13 @@ main {
   main { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .col { border-top: 1px solid var(--line); }
   .col:nth-child(odd) { border-left: 0; }
-  .pct { font-size: min(34cqw, 120px); }
   .title { display: none; }
 }
 @media (max-width: 520px) {
   main { grid-template-columns: minmax(0, 1fr); }
   .col { border-left: 0; }
-  .pct { font-size: min(40cqw, 140px); }
 }
-@media (prefers-reduced-motion: reduce) { .big-bar > div, .priority-focus .bar > div, .zone .b > div { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .big-bar > div, .zone .b > div { transition: none; } }
 </style>
 </head>
 <body>
@@ -203,7 +206,7 @@ const COLS = {
   geral: 'AK', proxima: 'CH',
 };
 const PRIORIDADE_COLS = { PS1: 'CI', PS2: 'CJ', PS3: 'CK', PS4: 'CL', PS5: 'CM' };
-const ZONAS = [['Cuba','cuba'],['Estrutura','estrutura'],['Interior','interior'],['Envolventes','envolventes']];
+const ZONAS = [];
 
 /* ── helpers ── */
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -319,58 +322,41 @@ function renderCol(p, d) {
   const priorityPct = d.prioridadeEmCurso?.percentagem;
   const priorityLabel = d.prioridadeEmCurso?.nome || (d.prioridade && /^\d+(?:[.,]\d+)?$/.test(d.prioridade)
     ? `P${d.prioridade.replace(/[.,]/g, '_')}` : d.prioridade) || '—';
-  const prioridadesHtml = (d.prioridadesRealizadas || []).map(prio => `
-    <div class="done-priority"><span>${esc(prio.nome)}</span><strong>${prio.percentagem == null ? '—' : `${prio.percentagem}%`}</strong></div>`).join('');
   let prazoHtml;
   if (d.inicio && d.previsto) {
     const today = new Date(); today.setHours(0,0,0,0);
     const total = workDays(d.inicio, d.previsto, true);
     const used = Math.min(total, workDays(d.inicio, today, true));
-    const rest = today > d.previsto ? -workDays(d.previsto, today, false) : workDays(today, d.previsto, false);
     const ratio = total > 0 ? Math.min(1, used / total) : 0;
     const pc = ratio >= .9 ? 'var(--red)' : ratio >= .7 ? 'var(--amber)' : 'var(--green)';
-    const rc = rest <= 1 ? 'var(--red)' : rest <= 3 ? 'var(--amber)' : 'var(--green)';
-    const restTxt = rest < 0 ? `${-rest} dias em atraso` : `${rest} ${rest === 1 ? 'dia restante' : 'dias restantes'}`;
     prazoHtml = `
-      <div class="row"><span class="k">Prazo</span><span class="rest" style="color:${rc}">${restTxt}</span></div>
-      <div class="row"><span class="num" style="color:${pc}">${used}<span> / ${total} dias</span></span></div>
-      <div class="big-bar"><div style="width:${ratio * 100}%;background:${pc}"></div></div>
-      <div class="dates"><span>${fmtDate(d.inicio)}</span><span>${fmtDate(d.previsto)}</span></div>`;
+      <div class="row"><span class="k">Prazo</span></div>
+      <div class="big-bar"><div style="width:${ratio * 100}%;background:${pc}"></div></div>`;
   } else {
-    prazoHtml = `<div class="row"><span class="k">Prazo</span><span class="rest" style="color:var(--fg-faint)">—</span></div>`;
+    prazoHtml = `<div class="row"><span class="k">Prazo</span></div><div class="big-bar"><div style="width:0%;background:transparent"></div></div>`;
   }
   return `
     <div class="posto-head">
       <div class="posto">${esc(p.nome)}</div>
       <span class="pill ${d.ativo ? 'on' : 'off'}">${d.ativo ? 'Em curso' : 'Standby'}</span>
     </div>
-    <div class="next-priority">
-      <span class="k">Próxima prioridade</span>
-      <strong class="value">${esc(d.proxima || '—')}</strong>
+    <div class="focus">
+      <div class="pct" style="color:${d.ativo ? c : 'var(--fg-faint)'}">${pct}<small>%</small></div>
+      <div class="model">
+        <div class="m">${esc(d.modelo || '—')}</div>
+        ${d.lote ? `<div class="l"><span>Lote</span>${esc(d.lote)}</div>` : '<div class="l none">Sem lote</div>'}
+      </div>
+      <div class="prazo">${prazoHtml}</div>
     </div>
-    <div class="pct" style="color:${d.ativo ? c : 'var(--fg-faint)'}">${pct}<small>%</small></div>
-    <div class="big-bar"><div style="width:${pct}%;background:${d.ativo ? c : 'var(--fg-faint)'}"></div></div>
-    <div class="priority-focus">
-      <div class="name"><span class="k">Prioridade em curso</span><span class="task">${esc(priorityLabel)}</span></div>
-      <span class="value">${priorityPct == null ? '—' : priorityPct}<small>${priorityPct == null ? '' : '%'}</small></span>
-      <div class="bar"><div style="width:${priorityPct == null ? 0 : priorityPct}%;background:${priorityPct == null ? 'transparent' : colorFor(priorityPct)}"></div></div>
-    </div>
-    <div class="model">
-      <div class="m">${esc(d.modelo || '—')}</div>
-      <div class="l">${d.lote ? 'Lote · ' + esc(d.lote) : 'Sem lote'}</div>
-    </div>
-    <div class="zones">
-      ${ZONAS.map(([n, k]) => {
-        const v = d.zonas[k];
-        return `<div class="zone"><span class="n">${n}</span><span class="v" style="color:${v === 100 ? 'var(--green)' : v > 0 ? 'var(--fg)' : 'var(--fg-faint)'}">${v}%</span>
-          <div class="b"><div style="width:${v}%;background:${barColor(v)}"></div></div></div>`;
-      }).join('')}
-    </div>
-    <div class="prazo">${prazoHtml}</div>
-    <div class="priority-grid">
-      <div class="done-priorities">
-        <span class="k">Prioridades realizadas</span>
-        <div class="items">${prioridadesHtml || '<span class="done-priority empty">—</span>'}</div>
+    <div class="secondary">
+      <div class="priority-focus">
+        <div class="pie" style="--p:${priorityPct == null ? 0 : Math.max(0, Math.min(100, priorityPct))};--c:${colorFor(priorityPct || 0)}"></div>
+        <div class="name"><span class="k">Prioridade em curso</span><span class="task">${esc(priorityLabel)}</span></div>
+        <span class="value">${priorityPct == null ? '—' : priorityPct}<small>${priorityPct == null ? '' : '%'}</small></span>
+      </div>
+      <div class="next-priority">
+        <span class="k">Próxima prioridade</span>
+        <strong class="value">${esc(d.proxima || '—')}</strong>
       </div>
     </div>`;
 }
